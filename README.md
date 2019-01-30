@@ -22,6 +22,7 @@ func main() {
 	if err != nil {
 		if !valid {
 			log.Println("body do not validated", err)
+			return
 		}
 
 		switch err.(type) {
