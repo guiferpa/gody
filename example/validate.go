@@ -2,44 +2,82 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/guiferpa/gody"
+	"github.com/guiferpa/gody/rule"
 )
 
-type Body struct {
-	Text   string `json:"text" validate:"required=true"`
-	Number int    `json:"number" validate:"min=10"`
+func SimpleValidate() {
+	b := struct {
+		Text string `json:"text" validate:"required=true"`
+	}{}
+
+	valid, err := gody.Validate(b, nil)
+	if err != nil {
+		if !valid {
+			log.Println("body do not validated", err)
+		}
+
+		switch err.(type) {
+		case *rule.ErrRequired:
+			log.Println("required error", err)
+			break
+		}
+	}
 }
 
-func validate(b interface{}) {
-	valid, err := gody.Validate(b, nil)
-	if !valid {
-		fmt.Println("body do not validated")
+type ErrInvalidPalindrome struct {
+	Value string
+}
+
+func (e *ErrInvalidPalindrome) Error() string {
+	return fmt.Sprintln("invalid palindrome:", e.Value)
+}
+
+type PalindromeRule struct{}
+
+func (r *PalindromeRule) Name() string {
+	return "palindrome"
+}
+
+func (r *PalindromeRule) Validate(f, v, p string) (bool, error) {
+	// TODO: The algorithm for palindrome validation
+	return true, &ErrInvalidPalindrome{Value: v}
+}
+
+func CustomValidate() {
+	b := struct {
+		Text       string `json:"text" validate:"required=true"`
+		Palindrome string `json:"palindrome" validate:"palindrome=true"`
+	}{
+		Text:       "test-text",
+		Palindrome: "test-palindrome",
 	}
 
+	customRules := []rule.Rule{
+		&PalindromeRule{},
+	}
+
+	valid, err := gody.Validate(b, customRules)
 	if err != nil {
-		fmt.Println(err)
+		if !valid {
+			log.Println("body do not validated", err)
+		}
+
+		switch err.(type) {
+		case *rule.ErrRequired:
+			log.Println("required error", err)
+			break
+
+		case *ErrInvalidPalindrome:
+			log.Println("palindrome error:", err)
+			break
+		}
 	}
 }
 
 func main() {
-	// validation OK without error
-	ba := Body{Text: "test-text", Number: 10}
-	validate(ba)
-
-	// without validation because invalid body: ptr
-	bb := &Body{Text: "test-text", Number: 11}
-	validate(bb)
-
-	// validation OK with required error
-	bc := Body{Text: "", Number: 11}
-	validate(bc)
-
-	// validation OK with min error
-	bd := Body{Text: "test-text", Number: 9}
-	validate(bd)
-
-	// without validation because invalid body: string
-	be := "test-text"
-	validate(be)
+	SimpleValidate()
+	CustomValidate()
 }
