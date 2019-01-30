@@ -57,7 +57,7 @@ func Serialize(b interface{}) ([]Field, error) {
 
 		fields = append(fields, Field{
 			Name:  strings.ToLower(field.Name),
-			Value: fmt.Sprintf("%s", valueOf.FieldByName(field.Name)),
+			Value: fmt.Sprintf("%v", valueOf.FieldByName(field.Name)),
 			Tags:  tags})
 	}
 

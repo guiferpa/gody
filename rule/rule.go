@@ -7,4 +7,9 @@ type Rule interface {
 
 var (
 	Required = &required{}
+	Max      = &max{}
+	Min      = &min{}
+	Enum     = &enum{}
+	MaxBound = &maxBound{}
+	MinBound = &minBound{}
 )
