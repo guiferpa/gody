@@ -10,13 +10,18 @@ func Validate(b interface{}) (bool, error) {
 		return false, err
 	}
 
+	defaultRules := []rule.Rule{
+		rule.Required,
+	}
+
 	for _, field := range fields {
-		for _, tag := range field.Tags {
-			switch tag.Key {
-			case rule.Required.Name():
-				if ok, err := rule.Required.Validate(field.Name, field.Value, tag.Value); err != nil {
-					return ok, err
-				}
+		for _, r := range defaultRules {
+			val, ok := field.Tags[r.Name()]
+			if !ok {
+				continue
+			}
+			if ok, err := r.Validate(field.Name, field.Value, val); err != nil {
+				return ok, err
 			}
 		}
 	}

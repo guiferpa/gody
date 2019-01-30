@@ -23,15 +23,10 @@ func (e *ErrInvalidTag) Error() string {
 }
 
 type (
-	Tag struct {
-		Key   string
-		Value string
-	}
-
 	Field struct {
 		Name  string
 		Value string
-		Tags  []Tag
+		Tags  map[string]string
 	}
 )
 
@@ -51,13 +46,13 @@ func Serialize(b interface{}) ([]Field, error) {
 		}
 
 		tagFormats := strings.Fields(tagString)
-		tags := make([]Tag, 0)
+		tags := make(map[string]string, 0)
 		for i := 0; i < len(tagFormats); i++ {
 			tagFormatSplitted := strings.Split(tagFormats[i], "=")
 			if len(tagFormatSplitted) != 2 {
 				return nil, &ErrInvalidTag{Format: tagFormats[i]}
 			}
-			tags = append(tags, Tag{Key: tagFormatSplitted[0], Value: tagFormatSplitted[1]})
+			tags[tagFormatSplitted[0]] = tagFormatSplitted[1]
 		}
 
 		fields = append(fields, Field{
