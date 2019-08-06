@@ -1,0 +1,9 @@
+---
+kind: pipeline
+name: default
+
+steps:
+  - name: test
+    image: golang:1.11
+    commands:
+      - go test -v -bench=. ./...
