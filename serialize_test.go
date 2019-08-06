@@ -24,6 +24,10 @@ func TestSerializeBodyStruct(t *testing.T) {
 		}
 	}
 }
+func BenchmarkSerializeBodyStruct(b *testing.B) {
+	body := map[string]string{"test-key": "test-value"}
+	Serialize(body)
+}
 
 func TestSerializeBodyTagFormat(t *testing.T) {
 	cases := []struct {
