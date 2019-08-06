@@ -1,6 +1,8 @@
 # gody
 A lightweight body manipulator for Go
 
+## Quick start
+
 ```go
 package main
 
@@ -33,3 +35,5 @@ func main() {
 	}
 }
 ```
+
+> You can access more [examples](https://github.com/guiferpa/gody/blob/master/example/validate.go)
