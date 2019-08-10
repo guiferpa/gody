@@ -24,8 +24,7 @@ type Body struct {
 func main() {
 	b := Body{}
 
-	valid, err := gody.Validate(b, nil)
-	if err != nil {
+	if valid, err := gody.Validate(b, nil); err != nil {
 		if !valid {
 			log.Println("body do not validated", err)
 			return
