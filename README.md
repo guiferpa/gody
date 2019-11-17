@@ -26,7 +26,7 @@ func main() {
 
 	if valid, err := gody.Validate(b, nil); err != nil {
 		if !valid {
-			log.Println("body do not validated", err)
+			log.Println("body didn't validate", err)
 			return
 		}
 
