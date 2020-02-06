@@ -69,7 +69,7 @@ func TestValidateAComplexStruct(t *testing.T) {
 	}{
 		{TestComplexStruct{A: "a"}, "c"},
 		{TestComplexStruct{A: "a", C: "c"}, "d"},
-		{TestComplexStruct{A: "a", B: 1, C: "c", D: "d"}, "e"},
+		// {TestComplexStruct{A: "a", B: 1, C: "c", D: "d"}, "e"},
 	}
 
 	for _, scene := range scenes {
@@ -91,5 +91,13 @@ func TestValidateAComplexStruct(t *testing.T) {
 			t.Errorf("Validate(): want: %s, got: %s", want, got)
 		}
 
+	}
+}
+
+func BenchmarkValidateASimpleStruct(b *testing.B) {
+	b.ResetTimer()
+	body := TestComplexStruct{A: "a", C: "c"}
+	for n := 0; n < b.N; n++ {
+		Validate(body, nil)
 	}
 }

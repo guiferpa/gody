@@ -24,10 +24,6 @@ func TestSerializeBodyStruct(t *testing.T) {
 		}
 	}
 }
-func BenchmarkSerializeBodyStruct(b *testing.B) {
-	body := map[string]string{"test-key": "test-value"}
-	Serialize(body)
-}
 
 func TestSerializeBodyTagFormat(t *testing.T) {
 	cases := []struct {
@@ -53,5 +49,13 @@ func TestSerializeBodyTagFormat(t *testing.T) {
 		if _, ok := err.(*ErrInvalidTag); ok == c.ok {
 			t.Error(err)
 		}
+	}
+}
+
+func BenchmarkSerializeBodyStruct(b *testing.B) {
+	b.ResetTimer()
+	body := map[string]string{"test-key": "test-value"}
+	for n := 0; n < b.N; n++ {
+		Serialize(body)
 	}
 }
