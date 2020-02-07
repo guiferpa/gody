@@ -1,6 +1,6 @@
 # gody
 
-:balloon: **A lightweight body validator for Go**
+:balloon: **A lightweight struct validator for Go**
 
 [![GoDoc](https://godoc.org/github.com/guiferpa/gody?status.svg)](https://godoc.org/github.com/guiferpa/gody)
 [![Go Report Card](https://goreportcard.com/badge/github.com/guiferpa/gody)](https://goreportcard.com/report/github.com/guiferpa/gody)
