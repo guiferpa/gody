@@ -1,9 +1,10 @@
 # gody
+
+:balloon: **A lightweight body validator for Go**
+
 [![GoDoc](https://godoc.org/github.com/guiferpa/gody?status.svg)](https://godoc.org/github.com/guiferpa/gody)
 [![Go Report Card](https://goreportcard.com/badge/github.com/guiferpa/gody)](https://goreportcard.com/report/github.com/guiferpa/gody)
 [![Build Status](https://cloud.drone.io/api/badges/guiferpa/gody/status.svg)](https://cloud.drone.io/guiferpa/gody)
-
-A lightweight body manipulator for Go
 
 ## Quick start
 
