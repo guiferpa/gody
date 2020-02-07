@@ -1,7 +1,6 @@
 package rule
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -19,7 +18,7 @@ func TestRequired(t *testing.T) {
 		t.Error(err)
 	}
 	if !ok {
-		fmt.Errorf("unexpected result, result: %v, expected: %v", ok, true)
+		t.Errorf("unexpected result, result: %v, expected: %v", ok, true)
 	}
 }
 
@@ -30,7 +29,7 @@ func TestRequiredWithEmptyValue(t *testing.T) {
 		t.Error(err)
 	}
 	if !ok {
-		fmt.Errorf("unexpected result, result: %v, expected: %v", ok, true)
+		t.Errorf("unexpected result, result: %v, expected: %v", ok, true)
 	}
 }
 
@@ -38,9 +37,9 @@ func TestRequiredWithInvalidParam(t *testing.T) {
 	r := Required
 	ok, err := r.Validate("", "", "axl-rose&slash")
 	if err == nil {
-		fmt.Errorf("unexpected error as result")
+		t.Errorf("unexpected error as result")
 	}
 	if ok {
-		fmt.Errorf("unexpected result, result: %v, expected: %v", ok, false)
+		t.Errorf("unexpected result, result: %v, expected: %v", ok, false)
 	}
 }

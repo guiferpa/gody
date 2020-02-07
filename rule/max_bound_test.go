@@ -1,7 +1,6 @@
 package rule
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -28,7 +27,7 @@ func TestMaxBound(t *testing.T) {
 			t.Error(err)
 		}
 		if !ok {
-			fmt.Errorf("unexpected result, result: %v, expected: %v", ok, true)
+			t.Errorf("unexpected result, result: %v, expected: %v", ok, true)
 		}
 	}
 }
@@ -48,7 +47,7 @@ func TestMaxBoundWithoutLimit(t *testing.T) {
 			t.Error(err)
 		}
 		if !ok {
-			fmt.Errorf("unexpected result, result: %v, expected: %v", ok, true)
+			t.Errorf("unexpected result, result: %v, expected: %v", ok, true)
 		}
 	}
 }
