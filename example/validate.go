@@ -32,7 +32,7 @@ type ErrInvalidPalindrome struct {
 }
 
 func (e *ErrInvalidPalindrome) Error() string {
-	return fmt.Sprintln("invalid palindrome:", e.Value)
+	return fmt.Sprintf("invalid palindrome: %s", e.Value)
 }
 
 type PalindromeRule struct{}
@@ -67,7 +67,7 @@ func CustomValidate() {
 
 		switch err.(type) {
 		case *rule.ErrRequired:
-			log.Println("required error", err)
+			log.Println("required error:", err)
 			break
 
 		case *ErrInvalidPalindrome:
@@ -77,7 +77,41 @@ func CustomValidate() {
 	}
 }
 
+type Price struct {
+	Currency string `json:"currency" validate:"enum=BRL,EUR,USD"`
+	Value    int    `json:"value" validate:"min=10"`
+}
+
+type ItemProduct struct {
+	Amount int `json:"amount" validate:"min=1"`
+
+	// validate tag's necessary for validation works if not setted it'll be ignored
+	Price Price `json:"price" validate:"required=true"`
+}
+
+func DeepValidate() {
+	ip := ItemProduct{Amount: 10, Price: Price{"BYN", 10000}}
+
+	if valid, err := gody.Validate(ip, nil); err != nil {
+		if !valid {
+			log.Println("product from cart didn't validate because of", err)
+			return
+		}
+
+		switch err.(type) {
+		case *rule.ErrRequired:
+			log.Println("required error:", err)
+			break
+
+		case *rule.ErrEnum:
+			log.Println("enum error:", err)
+			break
+		}
+	}
+}
+
 func main() {
 	SimpleValidate()
 	CustomValidate()
+	DeepValidate()
 }

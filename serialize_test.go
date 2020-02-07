@@ -4,13 +4,30 @@ import (
 	"testing"
 )
 
+type TestSerializeStructA struct {
+	a string
+}
+
+type TestSerializeStructB struct {
+	b string
+	a TestSerializeStructA
+}
+
+type TestSerializeStructC struct {
+	c string
+	b TestSerializeStructB
+	a TestSerializeStructA
+}
+
 func TestSerializeBodyStruct(t *testing.T) {
 	cases := []struct {
 		param interface{}
 		ok    bool
 	}{
 		{map[string]string{"test-key": "test-value"}, false},
-		{struct{ Value string }{"test-value"}, true},
+		{TestSerializeStructA{a: "a"}, true},
+		{TestSerializeStructB{b: "b", a: TestSerializeStructA{a: "a"}}, true},
+		{TestSerializeStructC{c: "c", b: TestSerializeStructB{b: "b", a: TestSerializeStructA{a: "a"}}, a: TestSerializeStructA{a: "a"}}, true},
 		{10, false},
 		{struct{}{}, true},
 		{"", false},

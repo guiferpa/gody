@@ -31,12 +31,17 @@ type (
 )
 
 func Serialize(b interface{}) ([]Field, error) {
-	valueOf := reflect.ValueOf(b)
-	if valueOf.Kind().String() != "struct" {
-		return nil, &ErrInvalidBody{Kind: valueOf.Kind()}
+	if b == nil {
+		return nil, &ErrInvalidBody{}
 	}
 
+	valueOf := reflect.ValueOf(b)
 	typeOf := reflect.TypeOf(b)
+
+	if kindOfBody := typeOf.Kind(); kindOfBody != reflect.Struct {
+		return nil, &ErrInvalidBody{Kind: kindOfBody}
+	}
+
 	fields := make([]Field, 0)
 	for i := 0; i < typeOf.NumField(); i++ {
 		field := typeOf.Field(i)
@@ -55,10 +60,29 @@ func Serialize(b interface{}) ([]Field, error) {
 			tags[tagFormatSplitted[0]] = tagFormatSplitted[1]
 		}
 
-		fields = append(fields, Field{
-			Name:  strings.ToLower(field.Name),
-			Value: fmt.Sprintf("%v", valueOf.FieldByName(field.Name)),
-			Tags:  tags})
+		fieldValue := valueOf.FieldByName(field.Name)
+		fieldNameToLower := strings.ToLower(field.Name)
+		if kindOfField := field.Type.Kind(); kindOfField == reflect.Struct {
+			payload := fieldValue.Convert(field.Type).Interface()
+			serialized, err := Serialize(payload)
+			if err != nil {
+				return nil, err
+			}
+			for _, item := range serialized {
+				fields = append(fields, Field{
+					Name:  fmt.Sprintf("%s.%s", fieldNameToLower, item.Name),
+					Value: item.Value,
+					Tags:  item.Tags,
+				})
+			}
+		} else {
+			fieldValueString := fmt.Sprintf("%v", fieldValue)
+			fields = append(fields, Field{
+				Name:  fieldNameToLower,
+				Value: fieldValueString,
+				Tags:  tags,
+			})
+		}
 	}
 
 	return fields, nil
