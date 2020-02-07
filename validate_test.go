@@ -13,7 +13,7 @@ type TestSimpleStruct struct {
 	D string `validate:"required=true"`
 }
 
-func TestValidateASimpleStruct(t *testing.T) {
+func TestValidateRequiredWithASimpleStruct(t *testing.T) {
 	scenes := []struct {
 		TestSimpleStruct TestSimpleStruct
 		Field            string
@@ -45,11 +45,11 @@ func TestValidateASimpleStruct(t *testing.T) {
 }
 
 type TestComplexStructG struct {
-	I string
+	I string `validate:"required=true"`
 }
 
 type TestComplexStructE struct {
-	F int                `validate:"min=10"`
+	F string             `validate:"required=true"`
 	G TestComplexStructG `validate:"required=true"`
 	H bool
 }
@@ -62,14 +62,15 @@ type TestComplexStruct struct {
 	E TestComplexStructE `validate:"required=true"`
 }
 
-func TestValidateAComplexStruct(t *testing.T) {
+func TestValidateRequiredWithAComplexStruct(t *testing.T) {
 	scenes := []struct {
 		TestComplexStruct TestComplexStruct
 		Field             string
 	}{
 		{TestComplexStruct{A: "a"}, "c"},
 		{TestComplexStruct{A: "a", C: "c"}, "d"},
-		// {TestComplexStruct{A: "a", B: 1, C: "c", D: "d"}, "e"},
+		{TestComplexStruct{A: "a", B: 1, C: "c", D: "d", E: TestComplexStructE{F: ""}}, "e.f"},
+		{TestComplexStruct{A: "a", B: 1, C: "c", D: "d", E: TestComplexStructE{F: "f", G: TestComplexStructG{I: ""}}}, "e.g.i"},
 	}
 
 	for _, scene := range scenes {
@@ -97,6 +98,14 @@ func TestValidateAComplexStruct(t *testing.T) {
 func BenchmarkValidateASimpleStruct(b *testing.B) {
 	b.ResetTimer()
 	body := TestComplexStruct{A: "a", C: "c"}
+	for n := 0; n < b.N; n++ {
+		Validate(body, nil)
+	}
+}
+
+func BenchmarkValidateAComplexStruct(b *testing.B) {
+	b.ResetTimer()
+	body := TestComplexStruct{A: "a", B: 1, C: "c", D: "d", E: TestComplexStructE{F: "f", G: TestComplexStructG{I: ""}}}
 	for n := 0; n < b.N; n++ {
 		Validate(body, nil)
 	}
