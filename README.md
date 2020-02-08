@@ -5,6 +5,7 @@
 [![GoDoc](https://godoc.org/github.com/guiferpa/gody?status.svg)](https://godoc.org/github.com/guiferpa/gody)
 [![Go Report Card](https://goreportcard.com/badge/github.com/guiferpa/gody)](https://goreportcard.com/report/github.com/guiferpa/gody)
 [![Build Status](https://cloud.drone.io/api/badges/guiferpa/gody/status.svg)](https://cloud.drone.io/guiferpa/gody)
+[![Coverage Status](https://coveralls.io/repos/github/guiferpa/gody/badge.svg?branch=master)](https://coveralls.io/github/guiferpa/gody?branch=master)
 
 ## Quick start
 
