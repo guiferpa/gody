@@ -75,6 +75,23 @@ func Serialize(b interface{}) ([]Field, error) {
 					Tags:  item.Tags,
 				})
 			}
+		} else if kindOfField := field.Type.Kind(); kindOfField == reflect.Slice {
+			j := fieldValue.Len()
+			for i := 0; i < j; i++ {
+				sliceFieldValue := fieldValue.Index(i)
+				payload := sliceFieldValue.Convert(sliceFieldValue.Type()).Interface()
+				serialized, err := Serialize(payload)
+				if err != nil {
+					return nil, err
+				}
+				for _, item := range serialized {
+					fields = append(fields, Field{
+						Name:  fmt.Sprintf("%s[%v].%s", fieldNameToLower, i, item.Name),
+						Value: item.Value,
+						Tags:  item.Tags,
+					})
+				}
+			}
 		} else {
 			fieldValueString := fmt.Sprintf("%v", fieldValue)
 			fields = append(fields, Field{

@@ -31,7 +31,7 @@ func TestValidateRequiredWithASimpleStruct(t *testing.T) {
 
 		ce, ok := err.(*rule.ErrRequired)
 		if !ok {
-			t.Error("Unexpected no error")
+			t.Error("Unexpected error")
 			return
 		}
 
@@ -82,7 +82,101 @@ func TestValidateRequiredWithAComplexStruct(t *testing.T) {
 
 		ce, ok := err.(*rule.ErrRequired)
 		if !ok {
-			t.Error("Unexpected no error")
+			t.Error("Unexpected error")
+			return
+		}
+
+		want := scene.Field
+		got := ce.Field
+		if want != ce.Field {
+			t.Errorf("Validate(): want: %s, got: %s", want, got)
+		}
+
+	}
+}
+
+type TestComplexSliceStructC struct {
+	D string `json:"d"`
+	E string `json:"e" validate:"enum=e required=true"`
+}
+
+type TestComplexSliceStructB struct {
+	Cs []TestComplexSliceStructC `json:"cs" validate:"required=true"`
+}
+
+type TestComplexiSliceStruct struct {
+	A string                  `json:"a" validate:"enum=1,2,3,a"`
+	B TestComplexSliceStructB `json:"b" validate:"required=true"`
+}
+
+func TestValidateRequiredWithAComplexSliceStruct(t *testing.T) {
+	scenes := []struct {
+		TestComplexSliceStruct TestComplexiSliceStruct
+		Field                  string
+	}{
+		{TestComplexiSliceStruct{
+			A: "a",
+			B: TestComplexSliceStructB{
+				Cs: []TestComplexSliceStructC{
+					{E: "e"},
+					{D: "d", E: "e"},
+					{D: "test", E: ""},
+					{D: "test", E: "e"},
+				},
+			},
+		}, "b.cs[2].e"},
+	}
+
+	for _, scene := range scenes {
+		ok, err := Validate(scene.TestComplexSliceStruct, nil)
+		if !ok {
+			t.Error("Struct from current scene isn't valid, something wrong happens")
+			return
+		}
+
+		ce, ok := err.(*rule.ErrRequired)
+		if !ok {
+			t.Error("Unexpected error")
+			return
+		}
+
+		want := scene.Field
+		got := ce.Field
+		if want != ce.Field {
+			t.Errorf("Validate(): want: %s, got: %s", want, got)
+		}
+
+	}
+}
+
+func TestValidateEnumWithAComplexSliceStruct(t *testing.T) {
+	scenes := []struct {
+		TestComplexSliceStruct TestComplexiSliceStruct
+		Field                  string
+	}{
+		{TestComplexiSliceStruct{
+			A: "a",
+			B: TestComplexSliceStructB{
+				Cs: []TestComplexSliceStructC{
+					{E: "e"},
+					{D: "d", E: "e"},
+					{D: "test", E: "r"},
+					{D: "test", E: "e"},
+				},
+			},
+		}, "b.cs[2].e"},
+	}
+
+	for _, scene := range scenes {
+		ok, err := Validate(scene.TestComplexSliceStruct, nil)
+		if !ok {
+			t.Error("Struct from current scene isn't valid, something wrong happens")
+			return
+		}
+
+		ce, ok := err.(*rule.ErrEnum)
+		if !ok {
+			t.Error("Unexpected error")
 			return
 		}
 
@@ -106,6 +200,24 @@ func BenchmarkValidateASimpleStruct(b *testing.B) {
 func BenchmarkValidateAComplexStruct(b *testing.B) {
 	b.ResetTimer()
 	body := TestComplexStruct{A: "a", B: 1, C: "c", D: "d", E: TestComplexStructE{F: "f", G: TestComplexStructG{I: ""}}}
+	for n := 0; n < b.N; n++ {
+		Validate(body, nil)
+	}
+}
+
+func BenchmarkValidateAComplexSliceStruct(b *testing.B) {
+	b.ResetTimer()
+	body := TestComplexiSliceStruct{
+		A: "a",
+		B: TestComplexSliceStructB{
+			Cs: []TestComplexSliceStructC{
+				{E: "e"},
+				{D: "d", E: "e"},
+				{D: "test", E: "r"},
+				{D: "test", E: "e"},
+			},
+		},
+	}
 	for n := 0; n < b.N; n++ {
 		Validate(body, nil)
 	}
