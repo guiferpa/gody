@@ -12,6 +12,7 @@ func (r *maxBound) Name() string {
 	return "max_bound"
 }
 
+// ErrMaxBound is the representation about any error happened inside of the rule MaxBound
 type ErrMaxBound struct {
 	Field string
 	Value string

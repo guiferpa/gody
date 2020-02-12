@@ -12,6 +12,7 @@ func (r *minBound) Name() string {
 	return "min_bound"
 }
 
+// ErrMinBound is the representation about any error happened inside of the rule MinBound
 type ErrMinBound struct {
 	Field string
 	Value string

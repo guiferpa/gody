@@ -12,6 +12,7 @@ func (r *min) Name() string {
 	return "min"
 }
 
+// ErrMin is the representation about any error happened inside of the rule Min
 type ErrMin struct {
 	Field string
 	Value int

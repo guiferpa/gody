@@ -1,15 +1,27 @@
 package rule
 
+// Rule is a interface with the contract to implement a any rule
 type Rule interface {
 	Name() string
 	Validate(name, value, param string) (bool, error)
 }
 
 var (
+	// Required is a rule implemented
 	Required = &required{}
-	Max      = &max{}
-	Min      = &min{}
-	Enum     = &enum{}
+
+	// Max is a rule implemented
+	Max = &max{}
+
+	// Min is a rule implemented
+	Min = &min{}
+
+	// Enum is a rule implemented
+	Enum = &enum{}
+
+	// MaxBound is a rule implemented
 	MaxBound = &maxBound{}
+
+	// MinBound is a rule implemented
 	MinBound = &minBound{}
 )

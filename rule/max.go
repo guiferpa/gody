@@ -12,6 +12,7 @@ func (r *max) Name() string {
 	return "max"
 }
 
+// ErrMax is the representation about any error happened inside of the rule Max
 type ErrMax struct {
 	Field string
 	Value int

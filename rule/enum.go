@@ -11,6 +11,7 @@ func (r *enum) Name() string {
 	return "enum"
 }
 
+// ErrEnum is the representation about any error happened inside of the rule Enum
 type ErrEnum struct {
 	Field string
 	Value string

@@ -12,6 +12,7 @@ func (r *required) Name() string {
 	return "required"
 }
 
+// ErrRequired is the representation about any error happened inside of the rule Required
 type ErrRequired struct {
 	Field string
 }
