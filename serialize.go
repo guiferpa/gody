@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// ErrInvalidBody represents all invalid body report
 type ErrInvalidBody struct {
 	Kind reflect.Kind
 }
@@ -14,6 +15,7 @@ func (e *ErrInvalidBody) Error() string {
 	return fmt.Sprintln("invalid body:", e.Kind)
 }
 
+// ErrInvalidTag represents all invalid tag report
 type ErrInvalidTag struct {
 	Format string
 }
@@ -22,14 +24,14 @@ func (e *ErrInvalidTag) Error() string {
 	return fmt.Sprintln("invalid tag:", e.Format)
 }
 
-type (
-	Field struct {
-		Name  string
-		Value string
-		Tags  map[string]string
-	}
-)
+// Field is a struct to represents the domain about a field inner gody lib
+type Field struct {
+	Name  string
+	Value string
+	Tags  map[string]string
+}
 
+// Serialize is a func to serialize/parse all content about the struct input
 func Serialize(b interface{}) ([]Field, error) {
 	if b == nil {
 		return nil, &ErrInvalidBody{}

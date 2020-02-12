@@ -4,6 +4,7 @@ import (
 	"github.com/guiferpa/gody/rule"
 )
 
+// Validate contains the entrypoint to validation of struct input
 func Validate(b interface{}, customRules []rule.Rule) (bool, error) {
 	fields, err := Serialize(b)
 	if err != nil {
