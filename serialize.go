@@ -51,7 +51,7 @@ func Serialize(b interface{}) ([]Field, error) {
 		}
 
 		tagFormats := strings.Fields(tagString)
-		tags := make(map[string]string, 0)
+		tags := make(map[string]string)
 		for i := 0; i < len(tagFormats); i++ {
 			tagFormatSplitted := strings.Split(tagFormats[i], "=")
 			if len(tagFormatSplitted) != 2 {

@@ -22,7 +22,7 @@ func SimpleValidate() {
 		switch err.(type) {
 		case *rule.ErrRequired:
 			log.Println("required error", err)
-			break
+
 		}
 	}
 }
@@ -68,11 +68,9 @@ func CustomValidate() {
 		switch err.(type) {
 		case *rule.ErrRequired:
 			log.Println("required error:", err)
-			break
 
 		case *ErrInvalidPalindrome:
 			log.Println("palindrome error:", err)
-			break
 		}
 	}
 }
@@ -101,11 +99,9 @@ func DeepValidate() {
 		switch err.(type) {
 		case *rule.ErrRequired:
 			log.Println("required error:", err)
-			break
 
 		case *rule.ErrEnum:
 			log.Println("enum error:", err)
-			break
 		}
 	}
 }
