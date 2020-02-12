@@ -51,3 +51,22 @@ func TestMaxBoundWithoutLimit(t *testing.T) {
 		}
 	}
 }
+
+func TestMaxBoundWithInvalidParam(t *testing.T) {
+	r := MaxBound
+	cases := []struct {
+		value, param string
+	}{
+		{"1", "test"},
+		{"zico", "true"},
+	}
+	for _, test := range cases {
+		ok, err := r.Validate("", test.value, test.param)
+		if err == nil {
+			t.Error("unexpected no error")
+		}
+		if ok {
+			t.Errorf("unexpected result as okay")
+		}
+	}
+}

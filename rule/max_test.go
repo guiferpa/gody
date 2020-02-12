@@ -1,7 +1,6 @@
 package rule
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -27,7 +26,64 @@ func TestMax(t *testing.T) {
 			t.Error(err)
 		}
 		if !ok {
-			fmt.Errorf("unexpected result, result: %v, expected: %v", ok, true)
+			t.Errorf("unexpected result, result: %v, expected: %v", ok, true)
+		}
+	}
+}
+
+func TestMaxWithInvalidParam(t *testing.T) {
+	r := Max
+	cases := []struct {
+		value, param string
+	}{
+		{"2", "test"},
+		{"500", "true"},
+	}
+	for _, test := range cases {
+		ok, err := r.Validate("", test.value, test.param)
+		if err == nil {
+			t.Error("unexpected no error")
+		}
+		if ok {
+			t.Errorf("unexpected validation result as okay")
+		}
+	}
+}
+
+func TestMaxWithInvalidValue(t *testing.T) {
+	r := Max
+	cases := []struct {
+		value, param string
+	}{
+		{"test", "2"},
+		{"true", "500"},
+	}
+	for _, test := range cases {
+		ok, err := r.Validate("", test.value, test.param)
+		if err == nil {
+			t.Error("unexpected no error")
+		}
+		if ok {
+			t.Errorf("unexpected validation result as okay")
+		}
+	}
+
+}
+
+func TestMaxFailure(t *testing.T) {
+	r := Max
+	cases := []struct {
+		value, param string
+	}{
+		{"12", "3"},
+		{"5000", "2000"},
+		{"0", "-1"},
+		{"-20", "-22"},
+	}
+	for _, test := range cases {
+		_, err := r.Validate("", test.value, test.param)
+		if _, ok := err.(*ErrMax); !ok {
+			t.Errorf("unexpected error: %v", err)
 		}
 	}
 }

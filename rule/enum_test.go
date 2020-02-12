@@ -51,3 +51,7 @@ func TestEnumWithInvalidParams(t *testing.T) {
 		}
 	}
 }
+
+func TestEnumWithInvalidParamsType(t *testing.T) {
+
+}

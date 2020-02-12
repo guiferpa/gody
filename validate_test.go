@@ -6,6 +6,17 @@ import (
 	"github.com/guiferpa/gody/rule"
 )
 
+type TestStruct struct {
+	A string `validate:"required=true"`
+}
+
+func TestValidate(t *testing.T) {
+	b := TestStruct{"test"}
+	if _, err := Validate(b, nil); err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+}
+
 type TestSimpleStruct struct {
 	A string `validate:"required=true"`
 	B int    `json:"b" validate:"required=true"`

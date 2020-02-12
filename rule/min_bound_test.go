@@ -49,3 +49,22 @@ func TestMinBoundWithoutLimit(t *testing.T) {
 		}
 	}
 }
+
+func TestMinBoundWithInvalidParam(t *testing.T) {
+	r := MinBound
+	cases := []struct {
+		value, param string
+	}{
+		{"2", "test"},
+		{"500", "true"},
+	}
+	for _, test := range cases {
+		ok, err := r.Validate("", test.value, test.param)
+		if err == nil {
+			t.Error("unexpected no error")
+		}
+		if ok {
+			t.Errorf("unexpected validation result as okay")
+		}
+	}
+}
