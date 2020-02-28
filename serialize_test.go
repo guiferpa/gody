@@ -49,13 +49,19 @@ func TestSerializeBodyTagFormat(t *testing.T) {
 	}{
 		{struct {
 			Value string `validate:"required"`
-		}{"test-value"}, false},
+		}{"test-value"}, true},
 		{struct {
 			Value string `validate:"required=true"`
 		}{"test-value"}, true},
 		{struct {
 			Value string `validate:"required="`
-		}{"test-value"}, true},
+		}{"test-value"}, false},
+		{struct {
+			Value string `validate:"=required="`
+		}{"test-value"}, false},
+		{struct {
+			Value string `validate:"="`
+		}{"test-value"}, false},
 		{struct {
 			Value string
 		}{"test-value"}, true},

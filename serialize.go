@@ -54,12 +54,28 @@ func Serialize(b interface{}) ([]Field, error) {
 
 		tagFormats := strings.Fields(tagString)
 		tags := make(map[string]string)
-		for i := 0; i < len(tagFormats); i++ {
-			tagFormatSplitted := strings.Split(tagFormats[i], "=")
-			if len(tagFormatSplitted) != 2 {
-				return nil, &ErrInvalidTag{Format: tagFormats[i]}
+		for _, tagFormat := range tagFormats {
+			tagFormatSplitted := strings.Split(tagFormat, "=")
+
+			if len(tagFormatSplitted) == 2 {
+				tagFormatRule := tagFormatSplitted[0]
+				tagFormatValue := tagFormatSplitted[1]
+				if tagFormatValue == "" {
+					return nil, &ErrInvalidTag{Format: tagFormat}
+				}
+
+				tags[tagFormatRule] = tagFormatValue
+				continue
 			}
-			tags[tagFormatSplitted[0]] = tagFormatSplitted[1]
+
+			if len(tagFormatSplitted) == 1 {
+				tagFormatRule := tagFormatSplitted[0]
+
+				tags[tagFormatRule] = ""
+				continue
+			}
+
+			return nil, &ErrInvalidTag{Format: tagFormat}
 		}
 
 		fieldValue := valueOf.FieldByName(field.Name)
