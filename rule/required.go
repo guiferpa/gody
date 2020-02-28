@@ -2,6 +2,7 @@ package rule
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -26,6 +27,7 @@ func (r *required) Validate(f, v, p string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+	log.Printf("[guiferpa/gody] :: ATTETION :: required rule is deprecated, please replace to use not_empty.")
 	if b && v != "" {
 		return true, nil
 	}

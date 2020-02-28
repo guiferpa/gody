@@ -7,6 +7,9 @@ type Rule interface {
 }
 
 var (
+	// NotEmpty is a rule implemented
+	NotEmpty = &notEmpty{}
+
 	// Required is a rule implemented
 	Required = &required{}
 

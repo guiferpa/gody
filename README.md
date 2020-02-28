@@ -22,7 +22,7 @@ import (
 )
 
 type Body struct {
-	Text string `json:"text" validate:"required=true"`
+	Text string `json:"text" validate:"not_empty"`
 }
 
 func main() {
@@ -30,18 +30,18 @@ func main() {
 
 	if valid, err := gody.Validate(b, nil); err != nil {
 		if !valid {
-			log.Println("body didn't validate", err)
-			return
+			log.Println("body didn't validate:", err)
 		}
 
 		switch err.(type) {
-		case *rule.ErrRequired:
-			log.Println("required error", err)
-			break
+		case *rule.ErrNotEmpty:
+			log.Println(err)
 		}
 	}
 }
 ```
+
+### Kinds of validation
 
 ### Deep validation
 

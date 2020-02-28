@@ -11,18 +11,18 @@ import (
 // SimpleValidate is a simple func to example
 func SimpleValidate() {
 	b := struct {
-		Text string `json:"text" validate:"required=true"`
+		Text string `json:"text" validate:"not_empty"`
 	}{}
 
 	valid, err := gody.Validate(b, nil)
 	if err != nil {
 		if !valid {
-			log.Println("body do not validated", err)
+			log.Println("body do not validated:", err)
 		}
 
 		switch err.(type) {
-		case *rule.ErrRequired:
-			log.Println("required error", err)
+		case *rule.ErrNotEmpty:
+			log.Println("not empty error:", err)
 
 		}
 	}
@@ -54,8 +54,8 @@ func (r *PalindromeRule) Validate(f, v, p string) (bool, error) {
 // CustomValidate is a simple func to example about a custom rule
 func CustomValidate() {
 	b := struct {
-		Text       string `json:"text" validate:"required=true"`
-		Palindrome string `json:"palindrome" validate:"palindrome=true"`
+		Text       string `json:"text" validate:"min_bound=5"`
+		Palindrome string `json:"palindrome" validate:"palindrome"`
 	}{
 		Text:       "test-text",
 		Palindrome: "test-palindrome",
@@ -92,7 +92,7 @@ type ItemProduct struct {
 	Amount int `json:"amount" validate:"min=1"`
 
 	// validate tag's necessary for validation works if not setted it'll be ignored
-	Price Price `json:"price" validate:"required=true"`
+	Price Price `json:"price" validate:"required"`
 }
 
 // DeepValidate is a simple func to example a deep validation
@@ -102,7 +102,6 @@ func DeepValidate() {
 	if valid, err := gody.Validate(ip, nil); err != nil {
 		if !valid {
 			log.Println("product from cart didn't validate because of", err)
-			return
 		}
 
 		switch err.(type) {

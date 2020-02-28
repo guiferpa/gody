@@ -12,6 +12,7 @@ func Validate(b interface{}, customRules []rule.Rule) (bool, error) {
 	}
 
 	defaultRules := []rule.Rule{
+		rule.NotEmpty,
 		rule.Required,
 		rule.Enum,
 		rule.Max,
