@@ -1,17 +1,9 @@
 package gody
 
-import (
-	"github.com/guiferpa/gody/rule"
-)
+import "github.com/guiferpa/gody/rule"
 
-// Validate contains the entrypoint to validation of struct input
-func Validate(b interface{}, customRules []rule.Rule) (bool, error) {
-	fields, err := Serialize(b)
-	if err != nil {
-		return false, err
-	}
-
-	defaultRules := []rule.Rule{
+func DefaultValidate(b interface{}, customRules []Rule) (bool, error) {
+	defaultRules := []Rule{
 		rule.NotEmpty,
 		rule.Required,
 		rule.Enum,
@@ -21,7 +13,15 @@ func Validate(b interface{}, customRules []rule.Rule) (bool, error) {
 		rule.MinBound,
 	}
 
-	rules := append(defaultRules, customRules...)
+	return Validate(b, append(defaultRules, customRules...))
+}
+
+// Validate contains the entrypoint to validation of struct input
+func Validate(b interface{}, rules []Rule) (bool, error) {
+	fields, err := Serialize(b)
+	if err != nil {
+		return false, err
+	}
 
 	for _, field := range fields {
 		for _, r := range rules {

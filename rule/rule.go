@@ -1,11 +1,5 @@
 package rule
 
-// Rule is a interface with the contract to implement a any rule
-type Rule interface {
-	Name() string
-	Validate(name, value, param string) (bool, error)
-}
-
 var (
 	// NotEmpty is a rule implemented
 	NotEmpty = &notEmpty{}
