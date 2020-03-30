@@ -20,6 +20,7 @@ func (v *Validator) AddRules(rs []Rule) error {
 		if dr, exists := v.rulesMap[r.Name()]; exists {
 			return &ErrDuplicatedRule{RuleDuplicated: dr}
 		}
+		v.rulesMap[r.Name()] = r
 	}
 	v.addedRules = append(v.addedRules, rs...)
 	return nil
