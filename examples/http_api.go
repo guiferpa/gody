@@ -84,8 +84,8 @@ func HTTPServerAPI() {
 			return
 		}
 
-		if processed, err := validator.Validate(body); err != nil {
-			if !processed {
+		if validated, err := validator.Validate(body); err != nil {
+			if !validated {
 				w.WriteHeader(http.StatusInternalServerError)
 				fmt.Fprintf(w, "Validation for body wasn't processed because of error: %v\n", err)
 				return
