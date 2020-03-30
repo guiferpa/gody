@@ -9,7 +9,12 @@
 [![Coverage Status](https://coveralls.io/repos/github/guiferpa/gody/badge.svg?branch=master)](https://coveralls.io/github/guiferpa/gody?branch=master)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/guiferpa/gody?color=purple&label=latest)](https://github.com/guiferpa/gody/releases/latest)
 
-## Quick start
+### Installation
+```bash
+go get github.com/guiferpa/gody@v1.0.0
+```
+
+### Usage
 
 ```go
 package main
