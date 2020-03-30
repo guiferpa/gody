@@ -6,6 +6,34 @@ import (
 	"github.com/guiferpa/gody/rule/ruletest"
 )
 
+func TestValidator(t *testing.T) {
+	payload := struct {
+		A int `validate:"test"`
+	}{10}
+
+	validator := NewValidator()
+
+	rule := ruletest.NewRule("test", true, nil)
+	rules := []Rule{rule}
+	if err := validator.AddRules(rules); err != nil {
+		t.Error("Unexpected error")
+		return
+	}
+	validated, err := validator.Validate(payload)
+	if !validated {
+		t.Error("Validated result is not expected")
+		return
+	}
+	if err != nil {
+		t.Error("Error result from validate is not expected")
+		return
+	}
+	if !rule.ValidateCalled {
+		t.Error("The rule validate wasn't call")
+		return
+	}
+}
+
 func TestDuplicatedRule(t *testing.T) {
 	validator := NewValidator()
 	rule := ruletest.NewRule("a", true, nil)
