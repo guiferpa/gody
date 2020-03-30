@@ -43,6 +43,6 @@ func main() {
 
 ### Kinds of validation
 
-- [Simple](https://github.com/guiferpa/gody/blob/master/example/validate.go#L11-L29)
-- [Deep](https://github.com/guiferpa/gody/blob/master/example/validate.go#L84-L115)
-- [Custom](https://github.com/guiferpa/gody/blob/master/example/validate.go#L31-L82)
+- [Simple](https://github.com/guiferpa/gody/blob/6fd8753bedc85053e4f91307edb6d1cda8159e79/example/validate.go#L11-L29)
+- [Deep](https://github.com/guiferpa/gody/blob/6fd8753bedc85053e4f91307edb6d1cda8159e79/example/validate.go#L84-L115)
+- [Custom](https://github.com/guiferpa/gody/blob/6fd8753bedc85053e4f91307edb6d1cda8159e79/example/validate.go#L31-L82)
