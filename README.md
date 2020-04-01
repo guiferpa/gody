@@ -11,7 +11,7 @@
 
 ### Installation
 ```bash
-go get github.com/guiferpa/gody@v1.0.0
+go get github.com/guiferpa/gody@v1.1.0
 ```
 
 ### Usage
