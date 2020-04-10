@@ -16,7 +16,9 @@ func (err *ErrIsAdult) Error() string {
 	return "The client isn't a adult then it isn't allowed buy"
 }
 
-type IsAdultRule struct{}
+type IsAdultRule struct {
+	adultAge int
+}
 
 func (r *IsAdultRule) Name() string {
 	return "is_adult"
@@ -27,13 +29,12 @@ func (r *IsAdultRule) Validate(_, value, _ string) (bool, error) {
 		return true, &ErrIsAdult{}
 	}
 
-	adultAge := 21
 	clientAge, err := strconv.Atoi(value)
 	if err != nil {
 		return false, err
 	}
 
-	if clientAge < adultAge {
+	if clientAge < r.adultAge {
 		return true, &ErrIsAdult{}
 	}
 
@@ -52,15 +53,15 @@ type Product struct {
 }
 
 type Cart struct {
-	Owner    User      `validate:"required"`
-	Products []Product `validate:"required"`
+	Owner    User
+	Products []Product
 }
 
 func HTTPServerAPI() {
 	validator := gody.NewValidator()
 
 	rules := []gody.Rule{
-		&IsAdultRule{},
+		&IsAdultRule{adultAge: 21},
 	}
 	if err := validator.AddRules(rules); err != nil {
 		log.Fatalln(err)

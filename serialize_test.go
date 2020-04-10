@@ -16,8 +16,8 @@ type TestSerializeStructB struct {
 
 type TestSerializeStructC struct {
 	c string
-	b TestSerializeStructB
-	a TestSerializeStructA
+	B TestSerializeStructB
+	A TestSerializeStructA
 }
 
 func TestSerializeBodyStruct(t *testing.T) {
@@ -28,7 +28,7 @@ func TestSerializeBodyStruct(t *testing.T) {
 		{map[string]string{"test-key": "test-value"}, false},
 		{TestSerializeStructA{a: "a"}, true},
 		{TestSerializeStructB{b: "b", a: TestSerializeStructA{a: "a"}}, true},
-		{TestSerializeStructC{c: "c", b: TestSerializeStructB{b: "b", a: TestSerializeStructA{a: "a"}}, a: TestSerializeStructA{a: "a"}}, true},
+		{TestSerializeStructC{c: "c", B: TestSerializeStructB{b: "b", a: TestSerializeStructA{a: "a"}}, A: TestSerializeStructA{a: "a"}}, true},
 		{10, false},
 		{struct{}{}, true},
 		{"", false},
@@ -110,8 +110,8 @@ type TestSerializeSliceA struct {
 
 func TestSliceSerialize(t *testing.T) {
 	body := struct {
-		A string                `validate:"test"`
-		B []TestSerializeSliceA `validate:"required"`
+		A string `validate:"test"`
+		B []TestSerializeSliceA
 	}{"a-value", []TestSerializeSliceA{{10}, {}}}
 
 	fields, err := Serialize(body)
@@ -129,6 +129,38 @@ func TestSliceSerialize(t *testing.T) {
 		{Name: "a", Value: "a-value", Tags: map[string]string{"test": ""}},
 		{Name: "b[0].e", Value: "10", Tags: map[string]string{"test-slice": ""}},
 		{Name: "b[1].e", Value: "0", Tags: map[string]string{"test-slice": ""}},
+	}
+	if got, want := fmt.Sprint(fields), fmt.Sprint(wantedFields); got != want {
+		t.Errorf("Serialized fields unexpected: got: %v want: %v", got, want)
+		return
+	}
+}
+
+type TestSerializeStructE struct {
+	a string `validate:"test-private-struct-field=300"`
+}
+
+type TestSerializeStructD struct {
+	J string `validate:"test-struct"`
+	I TestSerializeStructE
+}
+
+func TestStructSlice(t *testing.T) {
+	body := struct {
+		A string `validate:"test"`
+		B TestSerializeStructD
+	}{"a-value", TestSerializeStructD{J: "j-test-struct", I: TestSerializeStructE{a: "a-test-private-struct-field"}}}
+
+	fields, err := Serialize(body)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	wantedFields := []Field{
+		{Name: "a", Value: "a-value", Tags: map[string]string{"test": ""}},
+		{Name: "b.j", Value: "j-test-struct", Tags: map[string]string{"test-struct": ""}},
+		{Name: "b.i.a", Value: "a-test-private-struct-field", Tags: map[string]string{"test-private-struct-field": "300"}},
 	}
 	if got, want := fmt.Sprint(fields), fmt.Sprint(wantedFields); got != want {
 		t.Errorf("Serialized fields unexpected: got: %v want: %v", got, want)

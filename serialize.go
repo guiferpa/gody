@@ -48,7 +48,7 @@ func Serialize(b interface{}) ([]Field, error) {
 	for i := 0; i < typeOf.NumField(); i++ {
 		field := typeOf.Field(i)
 		tagString := field.Tag.Get("validate")
-		if tagString == "" {
+		if tagString == "" && field.Type.Kind() != reflect.Slice && field.Type.Kind() != reflect.Struct {
 			continue
 		}
 
@@ -81,33 +81,37 @@ func Serialize(b interface{}) ([]Field, error) {
 		fieldValue := valueOf.FieldByName(field.Name)
 		fieldNameToLower := strings.ToLower(field.Name)
 		if kindOfField := field.Type.Kind(); kindOfField == reflect.Struct {
-			payload := fieldValue.Convert(field.Type).Interface()
-			serialized, err := Serialize(payload)
-			if err != nil {
-				return nil, err
-			}
-			for _, item := range serialized {
-				fields = append(fields, Field{
-					Name:  fmt.Sprintf("%s.%s", fieldNameToLower, item.Name),
-					Value: item.Value,
-					Tags:  item.Tags,
-				})
-			}
-		} else if kindOfField := field.Type.Kind(); kindOfField == reflect.Slice {
-			j := fieldValue.Len()
-			for i := 0; i < j; i++ {
-				sliceFieldValue := fieldValue.Index(i)
-				payload := sliceFieldValue.Convert(sliceFieldValue.Type()).Interface()
+			if fieldConverted := fieldValue.Convert(fieldValue.Type()); fieldConverted.CanInterface() {
+				payload := fieldConverted.Interface()
 				serialized, err := Serialize(payload)
 				if err != nil {
 					return nil, err
 				}
 				for _, item := range serialized {
 					fields = append(fields, Field{
-						Name:  fmt.Sprintf("%s[%v].%s", fieldNameToLower, i, item.Name),
+						Name:  fmt.Sprintf("%s.%s", fieldNameToLower, item.Name),
 						Value: item.Value,
 						Tags:  item.Tags,
 					})
+				}
+			}
+		} else if kindOfField := field.Type.Kind(); kindOfField == reflect.Slice {
+			j := fieldValue.Len()
+			for i := 0; i < j; i++ {
+				sliceFieldValue := fieldValue.Index(i)
+				if sliceFieldConverted := sliceFieldValue.Convert(sliceFieldValue.Type()); sliceFieldConverted.CanInterface() {
+					payload := sliceFieldValue.Convert(sliceFieldValue.Type()).Interface()
+					serialized, err := Serialize(payload)
+					if err != nil {
+						return nil, err
+					}
+					for _, item := range serialized {
+						fields = append(fields, Field{
+							Name:  fmt.Sprintf("%s[%v].%s", fieldNameToLower, i, item.Name),
+							Value: item.Value,
+							Tags:  item.Tags,
+						})
+					}
 				}
 			}
 		} else {
