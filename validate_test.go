@@ -1,6 +1,7 @@
 package gody
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/guiferpa/gody/rule/ruletest"
@@ -75,6 +76,32 @@ func TestValidateWithRuleError(t *testing.T) {
 	}
 	if _, ok := err.(*errStructBForValidation); !ok {
 		t.Errorf("Unexpected error type: got: %v", err)
+		return
+	}
+}
+
+func TestSetTagName(t *testing.T) {
+	validator := NewValidator()
+	if got, want := validator.tagName, DefaultTagName; got != want {
+		t.Errorf("Unexpected default tag value from validator struct type: got: %v, want: %v", got, want)
+		return
+	}
+
+	newTag := "new-tag"
+	validator.SetTagName(newTag)
+	if got, want := validator.tagName, newTag; got != want {
+		t.Errorf("Unexpected default tag value from validator struct type: got: %v, want: %v", got, want)
+		return
+	}
+
+	err := validator.SetTagName("")
+	if err == nil {
+		t.Errorf("Unexpected error as nil")
+		return
+	}
+
+	if ce, ok := err.(*ErrEmptyTagName); !ok {
+		t.Errorf("Unexpected error type: got: %v, want: %v", reflect.TypeOf(ce), reflect.TypeOf(&ErrEmptyTagName{}))
 		return
 	}
 }

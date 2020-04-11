@@ -11,6 +11,7 @@ func (err *ErrDuplicatedRule) Error() string {
 }
 
 type Validator struct {
+	tagName    string
 	rulesMap   map[string]Rule
 	addedRules []Rule
 }
@@ -26,12 +27,21 @@ func (v *Validator) AddRules(rs []Rule) error {
 	return nil
 }
 
+func (v *Validator) SetTagName(tn string) error {
+	if tn == "" {
+		return &ErrEmptyTagName{}
+	}
+	v.tagName = tn
+	return nil
+}
+
 func (v *Validator) Validate(b interface{}) (bool, error) {
-	return DefaultValidate(b, v.addedRules)
+	return RawDefaultValidate(b, v.tagName, v.addedRules)
 }
 
 func NewValidator() *Validator {
+	tagName := DefaultTagName
 	rulesMap := make(map[string]Rule)
 	addedRules := make([]Rule, 0)
-	return &Validator{rulesMap, addedRules}
+	return &Validator{tagName, rulesMap, addedRules}
 }
