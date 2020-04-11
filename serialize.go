@@ -24,6 +24,12 @@ func (e *ErrInvalidTag) Error() string {
 	return fmt.Sprintln("invalid tag:", e.Format)
 }
 
+type ErrEmptyTagName struct{}
+
+func (e *ErrEmptyTagName) Error() string {
+	return "Tag name parameter is empty"
+}
+
 // Field is a struct to represents the domain about a field inner gody lib
 type Field struct {
 	Name  string
@@ -31,8 +37,16 @@ type Field struct {
 	Tags  map[string]string
 }
 
-// Serialize is a func to serialize/parse all content about the struct input
 func Serialize(b interface{}) ([]Field, error) {
+	return RawSerialize(DefaultTagName, b)
+}
+
+// RawSerialize is a func to serialize/parse all content about the struct input
+func RawSerialize(tn string, b interface{}) ([]Field, error) {
+	if tn == "" {
+		return nil, &ErrEmptyTagName{}
+	}
+
 	if b == nil {
 		return nil, &ErrInvalidBody{}
 	}
@@ -47,7 +61,7 @@ func Serialize(b interface{}) ([]Field, error) {
 	fields := make([]Field, 0)
 	for i := 0; i < typeOf.NumField(); i++ {
 		field := typeOf.Field(i)
-		tagString := field.Tag.Get("validate")
+		tagString := field.Tag.Get(tn)
 		if tagString == "" && field.Type.Kind() != reflect.Slice && field.Type.Kind() != reflect.Struct {
 			continue
 		}
@@ -83,7 +97,7 @@ func Serialize(b interface{}) ([]Field, error) {
 		if kindOfField := field.Type.Kind(); kindOfField == reflect.Struct {
 			if fieldConverted := fieldValue.Convert(fieldValue.Type()); fieldConverted.CanInterface() {
 				payload := fieldConverted.Interface()
-				serialized, err := Serialize(payload)
+				serialized, err := RawSerialize(tn, payload)
 				if err != nil {
 					return nil, err
 				}
@@ -101,7 +115,7 @@ func Serialize(b interface{}) ([]Field, error) {
 				sliceFieldValue := fieldValue.Index(i)
 				if sliceFieldConverted := sliceFieldValue.Convert(sliceFieldValue.Type()); sliceFieldConverted.CanInterface() {
 					payload := sliceFieldValue.Convert(sliceFieldValue.Type()).Interface()
-					serialized, err := Serialize(payload)
+					serialized, err := RawSerialize(tn, payload)
 					if err != nil {
 						return nil, err
 					}
