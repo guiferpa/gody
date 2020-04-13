@@ -19,7 +19,7 @@ func DefaultValidate(validationSubject interface{}, customRules []Rule, tn ...st
 
 // Validate contains the entrypoint to validation of struct input
 func Validate(validationSubject interface{}, rules []Rule, tn ...string) (bool, error) {
-	fields, err := Serialize(validationSubject, tn...)
+	fields, err := serialize(validationSubject, tn...)
 	if err != nil {
 		return false, err
 	}

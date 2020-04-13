@@ -36,7 +36,7 @@ func TestSerializeBodyStruct(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		_, err := Serialize(c.param)
+		_, err := serialize(c.param)
 		if _, ok := err.(*ErrInvalidBody); ok == c.ok {
 			t.Error(err)
 		}
@@ -69,7 +69,7 @@ func TestSerializeBodyTagFormat(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		_, err := Serialize(c.param)
+		_, err := serialize(c.param)
 		if _, ok := err.(*ErrInvalidTag); ok == c.ok {
 			t.Error(err)
 		}
@@ -83,7 +83,7 @@ func TestSerialize(t *testing.T) {
 		C bool   `validate:"test test_number=true"`
 	}{"a-value", 10, true}
 
-	fields, err := Serialize(body)
+	fields, err := serialize(body)
 	if err != nil {
 		t.Error(err)
 		return
@@ -114,7 +114,7 @@ func TestSliceSerialize(t *testing.T) {
 		B []TestSerializeSliceA
 	}{"a-value", []TestSerializeSliceA{{10}, {}}}
 
-	fields, err := Serialize(body)
+	fields, err := serialize(body)
 	if err != nil {
 		t.Error(err)
 		return
@@ -151,7 +151,7 @@ func TestStructSlice(t *testing.T) {
 		B TestSerializeStructD
 	}{"a-value", TestSerializeStructD{J: "j-test-struct", I: TestSerializeStructE{a: "a-test-private-struct-field"}}}
 
-	fields, err := Serialize(body)
+	fields, err := serialize(body)
 	if err != nil {
 		t.Error(err)
 		return
@@ -172,6 +172,6 @@ func BenchmarkSerializeBodyStruct(b *testing.B) {
 	b.ResetTimer()
 	body := map[string]string{"test-key": "test-value"}
 	for n := 0; n < b.N; n++ {
-		Serialize(body)
+		serialize(body)
 	}
 }

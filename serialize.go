@@ -32,7 +32,7 @@ type Field struct {
 }
 
 // Serialize is a func to serialize/parse all content about the struct input
-func Serialize(validationSubject interface{}, tn ...string) ([]Field, error) {
+func serialize(validationSubject interface{}, tn ...string) ([]Field, error) {
 	if tn == nil {
 		tn = []string{DefaultTagName}
 	}
@@ -93,7 +93,7 @@ func Serialize(validationSubject interface{}, tn ...string) ([]Field, error) {
 		if kindOfField := field.Type.Kind(); kindOfField == reflect.Struct {
 			if fieldConverted := fieldValue.Convert(fieldValue.Type()); fieldConverted.CanInterface() {
 				payload := fieldConverted.Interface()
-				serialized, err := Serialize(payload, tn...)
+				serialized, err := serialize(payload, tn...)
 				if err != nil {
 					return nil, err
 				}
@@ -111,7 +111,7 @@ func Serialize(validationSubject interface{}, tn ...string) ([]Field, error) {
 				sliceFieldValue := fieldValue.Index(i)
 				if sliceFieldConverted := sliceFieldValue.Convert(sliceFieldValue.Type()); sliceFieldConverted.CanInterface() {
 					payload := sliceFieldValue.Convert(sliceFieldValue.Type()).Interface()
-					serialized, err := Serialize(payload, tn...)
+					serialized, err := serialize(payload, tn...)
 					if err != nil {
 						return nil, err
 					}
