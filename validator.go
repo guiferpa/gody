@@ -32,7 +32,7 @@ func (v *Validator) SetTagName(tn string) {
 }
 
 func (v *Validator) Validate(b interface{}) (bool, error) {
-	return RawDefaultValidate(b, v.tagName, v.addedRules)
+	return DefaultValidate(b, v.addedRules, v.tagName)
 }
 
 func NewValidator() *Validator {

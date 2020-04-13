@@ -168,19 +168,6 @@ func TestStructSlice(t *testing.T) {
 	}
 }
 
-func TestRawSerializeWithEmptyTagName(t *testing.T) {
-	_, err := RawSerialize("", nil)
-	if err == nil {
-		t.Error("Unexpected nil value for error")
-		return
-	}
-
-	if _, ok := err.(*ErrEmptyTagName); !ok {
-		t.Error("Unexpected error type, not equal *ErrEmptyTagName")
-		return
-	}
-}
-
 func BenchmarkSerializeBodyStruct(b *testing.B) {
 	b.ResetTimer()
 	body := map[string]string{"test-key": "test-value"}

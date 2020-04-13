@@ -3,16 +3,7 @@ package gody
 import "github.com/guiferpa/gody/rule"
 
 // DefaultValidate validates the validation subject against pre-defined rules
-func DefaultValidate(validationSubject interface{}, customRules []Rule) (bool, error) {
-	return RawDefaultValidate(validationSubject, DefaultTagName, customRules)
-}
-
-// Validate contains the entrypoint to validation of struct input
-func Validate(validationSubject interface{}, rules []Rule) (bool, error) {
-	return RawValidate(validationSubject, DefaultTagName, rules)
-}
-
-func RawDefaultValidate(validationSubject interface{}, tn string, customRules []Rule) (bool, error) {
+func DefaultValidate(validationSubject interface{}, customRules []Rule, tn ...string) (bool, error) {
 	defaultRules := []Rule{
 		rule.NotEmpty,
 		rule.Required,
@@ -23,19 +14,20 @@ func RawDefaultValidate(validationSubject interface{}, tn string, customRules []
 		rule.MinBound,
 	}
 
-	return RawValidate(validationSubject, tn, append(defaultRules, customRules...))
+	return Validate(validationSubject, append(defaultRules, customRules...), tn...)
 }
 
-func RawValidate(validationSubject interface{}, tn string, rules []Rule) (bool, error) {
-	fields, err := RawSerialize(tn, validationSubject)
+// Validate contains the entrypoint to validation of struct input
+func Validate(validationSubject interface{}, rules []Rule, tn ...string) (bool, error) {
+	fields, err := Serialize(validationSubject, tn...)
 	if err != nil {
 		return false, err
 	}
 
-	return ValidateFields(fields, rules)
+	return validateFields(fields, rules)
 }
 
-func ValidateFields(fields []Field, rules []Rule) (bool, error) {
+func validateFields(fields []Field, rules []Rule) (bool, error) {
 	for _, field := range fields {
 		for _, r := range rules {
 			val, ok := field.Tags[r.Name()]

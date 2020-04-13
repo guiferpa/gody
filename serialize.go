@@ -24,12 +24,6 @@ func (e *ErrInvalidTag) Error() string {
 	return fmt.Sprintln("invalid tag:", e.Format)
 }
 
-type ErrEmptyTagName struct{}
-
-func (e *ErrEmptyTagName) Error() string {
-	return "Tag name parameter is empty"
-}
-
 // Field is a struct to represents the domain about a field inner gody lib
 type Field struct {
 	Name  string
@@ -37,22 +31,17 @@ type Field struct {
 	Tags  map[string]string
 }
 
-func Serialize(b interface{}) ([]Field, error) {
-	return RawSerialize(DefaultTagName, b)
-}
-
-// RawSerialize is a func to serialize/parse all content about the struct input
-func RawSerialize(tn string, b interface{}) ([]Field, error) {
-	if tn == "" {
-		return nil, &ErrEmptyTagName{}
+// Serialize is a func to serialize/parse all content about the struct input
+func Serialize(validationSubject interface{}, tn ...string) ([]Field, error) {
+	if tn == nil {
+		tn = []string{DefaultTagName}
 	}
-
-	if b == nil {
+	if validationSubject == nil {
 		return nil, &ErrInvalidBody{}
 	}
 
-	valueOf := reflect.ValueOf(b)
-	typeOf := reflect.TypeOf(b)
+	valueOf := reflect.ValueOf(validationSubject)
+	typeOf := reflect.TypeOf(validationSubject)
 
 	if kindOfBody := typeOf.Kind(); kindOfBody != reflect.Struct {
 		return nil, &ErrInvalidBody{Kind: kindOfBody}
@@ -61,7 +50,14 @@ func RawSerialize(tn string, b interface{}) ([]Field, error) {
 	fields := make([]Field, 0)
 	for i := 0; i < typeOf.NumField(); i++ {
 		field := typeOf.Field(i)
-		tagString := field.Tag.Get(tn)
+		var tagString string
+		for _, tag := range tn {
+			tagValue := field.Tag.Get(tag)
+			if tagValue != "" {
+				tagString = tagValue
+				break
+			}
+		}
 		if tagString == "" && field.Type.Kind() != reflect.Slice && field.Type.Kind() != reflect.Struct {
 			continue
 		}
@@ -97,7 +93,7 @@ func RawSerialize(tn string, b interface{}) ([]Field, error) {
 		if kindOfField := field.Type.Kind(); kindOfField == reflect.Struct {
 			if fieldConverted := fieldValue.Convert(fieldValue.Type()); fieldConverted.CanInterface() {
 				payload := fieldConverted.Interface()
-				serialized, err := RawSerialize(tn, payload)
+				serialized, err := Serialize(payload, tn...)
 				if err != nil {
 					return nil, err
 				}
@@ -115,7 +111,7 @@ func RawSerialize(tn string, b interface{}) ([]Field, error) {
 				sliceFieldValue := fieldValue.Index(i)
 				if sliceFieldConverted := sliceFieldValue.Convert(sliceFieldValue.Type()); sliceFieldConverted.CanInterface() {
 					payload := sliceFieldValue.Convert(sliceFieldValue.Type()).Interface()
-					serialized, err := RawSerialize(tn, payload)
+					serialized, err := Serialize(payload, tn...)
 					if err != nil {
 						return nil, err
 					}
