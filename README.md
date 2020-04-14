@@ -11,15 +11,15 @@
 
 ### Installation
 ```bash
-go get github.com/guiferpa/gody@v2.0.0
+go get github.com/guiferpa/gody/v2
 ```
 
 ### Usage
 
 ```go
 import (
-    "github.com/guiferpa/gody"
-    "github.com/guiferpa/gody/rule"
+    gody "github.com/guiferpa/gody/v2"
+    "github.com/guiferpa/gody/v2/rule"
 )
 
 type RequestBody struct {
