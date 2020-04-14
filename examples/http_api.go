@@ -60,10 +60,7 @@ type Cart struct {
 func HTTPServerAPI() {
 	validator := gody.NewValidator()
 
-	rules := []gody.Rule{
-		&IsAdultRule{adultAge: 21},
-	}
-	if err := validator.AddRules(rules); err != nil {
+	if err := validator.AddRules(&IsAdultRule{adultAge: 21}); err != nil {
 		log.Fatalln(err)
 	}
 

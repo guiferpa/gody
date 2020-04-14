@@ -55,10 +55,7 @@ func SimpleValidationFromValidator() {
 
 	validator := gody.NewValidator()
 
-	rules := []gody.Rule{
-		rule.NotEmpty,
-	}
-	if err := validator.AddRules(rules); err != nil {
+	if err := validator.AddRules(rule.NotEmpty); err != nil {
 		log.Println(err)
 		return
 	}

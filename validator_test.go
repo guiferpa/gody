@@ -14,8 +14,7 @@ func TestValidator(t *testing.T) {
 	validator := NewValidator()
 
 	rule := ruletest.NewRule("test", true, nil)
-	rules := []Rule{rule}
-	if err := validator.AddRules(rules); err != nil {
+	if err := validator.AddRules(rule); err != nil {
 		t.Error("Unexpected error")
 		return
 	}
@@ -43,7 +42,7 @@ func TestDuplicatedRule(t *testing.T) {
 		ruletest.NewRule("c", true, nil),
 		rule,
 	}
-	err := validator.AddRules(rules)
+	err := validator.AddRules(rules...)
 	if err == nil {
 		t.Error("Unexpected nil value for duplicated rule error")
 		return

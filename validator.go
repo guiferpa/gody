@@ -16,7 +16,7 @@ type Validator struct {
 	addedRules []Rule
 }
 
-func (v *Validator) AddRules(rs []Rule) error {
+func (v *Validator) AddRules(rs ...Rule) error {
 	for _, r := range rs {
 		if dr, exists := v.rulesMap[r.Name()]; exists {
 			return &ErrDuplicatedRule{RuleDuplicated: dr}
