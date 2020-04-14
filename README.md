@@ -17,41 +17,45 @@ go get github.com/guiferpa/gody/v2
 ### Usage
 
 ```go
+package main
+
 import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+
     gody "github.com/guiferpa/gody/v2"
     "github.com/guiferpa/gody/v2/rule"
-)
+) 
 
 type RequestBody struct {
     Name string `json:"name" validate:"not_empty"`
     Age  int    `json:"age" validate:"min=21"`
 }
 
-...
-
-validator := gody.NewValidator()
-
-rules := []gody.Rule{rule.NotEmpty, rule.Min}
-validator.AddRules(rules...)
-
 func HTTPHandler(vtr *gody.Validator) http.HandlerFunc {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         var body RequestBody
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+        if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 	    ...
+    	}
+	defer r.Body.Close()
+
+	if validated, err := vtr.Validate(body); err != nil {
+	    ...                                                                                
 	}
-        defer r.Body.Close()
-		
-        if validated, err := vtr.Validate(body); err != nil {
-            ...
-        }
-    }
+    })
 }
 
-port := /* port */
-http.ListenAndServe(port, HTTPHandler(validator))
+func main() {
+    validator := gody.NewValidator()
 
-...
+    rules := []gody.Rule{rule.NotEmpty, rule.Min}
+    validator.AddRules(rules...)
+
+    port := ":3000"
+    http.ListenAndServe(port, HTTPHandler(validator))
+}
 ```
 
 ### Others ways for validation
