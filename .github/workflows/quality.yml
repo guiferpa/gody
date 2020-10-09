@@ -1,0 +1,23 @@
+name: quality
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        go: ['1.11', '1.12', '1.13', '1.14']
+    name: Go ${{ matrix.go }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Running test
+        run: go test -cover -v $(go list -v ./...)
+
