@@ -83,4 +83,4 @@ gody.DefaultValidate(interface{}, []gody.Rule) (bool, error)
 
 ### Contribution policies
 
-1. At this time the only policy is don't create a Pull Request directly, it's necessary some discussions for some implementation then please open a issue before any thing to dicussion about the subject.
+1. At this time the only policy is don't create a Pull Request directly, it's necessary some discussions for some implementation then open an issue before to dicussion anything about the project.
