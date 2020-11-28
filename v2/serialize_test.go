@@ -181,6 +181,29 @@ func TestRawSerializeWithEmptyTagName(t *testing.T) {
 	}
 }
 
+type TestStructJSON struct {
+	A string `validate:"not_empty" json:"b"`
+}
+
+func TestRawSerializeWithJSONTagName(t *testing.T) {
+	body := struct {
+		A string `json:"b" validate:"not_empty"`
+	}{}
+
+	fields, err := RawSerialize("validate", body)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	field := fields[0]
+
+	if got, want := field.Name, "b"; got != want {
+		t.Errorf("Unexpected field name, got: %s, want: %s", got, want)
+		return
+	}
+}
+
 func BenchmarkSerializeBodyStruct(b *testing.B) {
 	b.ResetTimer()
 	body := map[string]string{"test-key": "test-value"}

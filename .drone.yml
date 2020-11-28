@@ -7,12 +7,12 @@ steps:
     image: golang:1.13
     commands:
       - go test -v -bench=. ./...
-      
+
   - name: coverage
     image: golang:1.13
     commands:
       - go get github.com/mattn/goveralls
-      - goveralls -v -service drone.io    
+      - goveralls -v -service drone.io
     environment:
       COVERALLS_TOKEN:
         from_secret: COVERALLS_TOKEN

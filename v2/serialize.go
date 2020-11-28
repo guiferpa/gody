@@ -94,6 +94,9 @@ func RawSerialize(tn string, b interface{}) ([]Field, error) {
 
 		fieldValue := valueOf.FieldByName(field.Name)
 		fieldNameToLower := strings.ToLower(field.Name)
+		if fieldNameFromJSONTag := field.Tag.Get("json"); fieldNameFromJSONTag != "" {
+			fieldNameToLower = fieldNameFromJSONTag
+		}
 		if kindOfField := field.Type.Kind(); kindOfField == reflect.Struct {
 			if fieldConverted := fieldValue.Convert(fieldValue.Type()); fieldConverted.CanInterface() {
 				payload := fieldConverted.Interface()
