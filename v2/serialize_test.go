@@ -181,10 +181,6 @@ func TestRawSerializeWithEmptyTagName(t *testing.T) {
 	}
 }
 
-type TestStructJSON struct {
-	A string `validate:"not_empty" json:"b"`
-}
-
 func TestRawSerializeWithJSONTagName(t *testing.T) {
 	body := struct {
 		A string `json:"b" validate:"not_empty"`
