@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/guiferpa/gody"
-	"github.com/guiferpa/gody/rule"
+	gody "github.com/guiferpa/gody/v2"
+	"github.com/guiferpa/gody/v2/rule"
 )
 
 func SimpleDefaultValidation() {

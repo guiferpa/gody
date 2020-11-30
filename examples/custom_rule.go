@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/guiferpa/gody"
-	"github.com/guiferpa/gody/rule"
+	gody "github.com/guiferpa/gody/v2"
+	"github.com/guiferpa/gody/v2/rule"
 )
 
 // ErrInvalidPalindrome is a custom error to a specific rule implementation

@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/guiferpa/gody"
+	gody "github.com/guiferpa/gody/v2"
 )
 
 type ErrIsAdult struct{}

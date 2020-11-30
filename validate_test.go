@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/guiferpa/gody/rule/ruletest"
+	"github.com/guiferpa/gody/v2/rule/ruletest"
 )
 
 type StructAForTest struct {

@@ -1,6 +1,6 @@
 package gody
 
-import "github.com/guiferpa/gody/rule"
+import "github.com/guiferpa/gody/v2/rule"
 
 func DefaultValidate(b interface{}, customRules []Rule) (bool, error) {
 	return RawDefaultValidate(b, DefaultTagName, customRules)

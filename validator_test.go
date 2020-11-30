@@ -3,7 +3,7 @@ package gody
 import (
 	"testing"
 
-	"github.com/guiferpa/gody/rule/ruletest"
+	"github.com/guiferpa/gody/v2/rule/ruletest"
 )
 
 func TestValidator(t *testing.T) {
