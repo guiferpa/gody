@@ -48,8 +48,7 @@ func HTTPHandler(vtr *gody.Validator) http.HandlerFunc {
 func main() {
     validator := gody.NewValidator()
 
-    rules := []gody.Rule{rule.NotEmpty, rule.Min}
-    validator.AddRules(rules...)
+    validator.AddRules(rule.NotEmpty, rule.Min)
 
     port := ":3000"
     http.ListenAndServe(port, HTTPHandler(validator))
