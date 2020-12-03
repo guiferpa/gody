@@ -31,7 +31,7 @@ type RequestBody struct {
     Age  int    `json:"age" validate:"min=21"`
 }
 
-func HTTPHandler(vtr *gody.Validator) http.HandlerFunc {
+func HTTPHandler(v *gody.Validator) http.HandlerFunc {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         var body RequestBody
         if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -39,7 +39,7 @@ func HTTPHandler(vtr *gody.Validator) http.HandlerFunc {
     	}
 	defer r.Body.Close()
 
-	if validated, err := vtr.Validate(body); err != nil {
+	if isValidated, err := v.Validate(body); err != nil {
 	    ...                                                                                
 	}
     })
