@@ -37,12 +37,12 @@ func HTTPHandler(v *gody.Validator) http.HandlerFunc {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         var body RequestBody
         if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-	    ...
+	    // ...
     	}
 	defer r.Body.Close()
 
 	if isValidated, err := v.Validate(body); err != nil {
-	    ...                                                                                
+	    // ...                                                                                
 	}
     })
 }
