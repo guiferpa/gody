@@ -20,10 +20,10 @@ func TestIsBooleanWithSuccessful(t *testing.T) {
 	for _, test := range cases {
 		valid, err := r.Validate("text", test, "")
 		if got, want := valid, true; got != want {
-			t.Errorf(`valid, _ := IsBoolean.Validate("text", "true", ""), got: %v, want: %v`, got, want)
+			t.Errorf(`valid, _ := IsBoolean.Validate("text", "%v", ""), got: %v, want: %v`, got, test, want)
 		}
 		if got, want := reflect.TypeOf(err), reflect.TypeOf(nil); got != want {
-			t.Errorf(`_, err := IsBoolean.Validate("text", "test", ""), got: %v, want: %v`, got, want)
+			t.Errorf(`_, err := IsBoolean.Validate("text", "", ""), got: %v, want: %v`, got, want)
 		}
 	}
 }
