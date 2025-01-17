@@ -70,3 +70,12 @@ func TestMaxBoundWithInvalidParam(t *testing.T) {
 		}
 	}
 }
+
+func TestMaxBoundError(t *testing.T) {
+	err := &ErrMaxBound{Field: "text", Value: "2", Bound: 1}
+	got := err.Error()
+	want := "the value 2 in field text has character limit greater than 1"
+	if got != want {
+		t.Errorf(`&ErrMaxBound{Field: "text", Value: "2", Bound: 1}.Error(), got: %v, want: %v`, got, want)
+	}
+}

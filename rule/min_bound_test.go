@@ -68,3 +68,12 @@ func TestMinBoundWithInvalidParam(t *testing.T) {
 		}
 	}
 }
+
+func TestMinBoundError(t *testing.T) {
+	err := &ErrMinBound{Field: "text", Value: "2", Bound: 1}
+	got := err.Error()
+	want := "the value 2 in field text has character limit less than 1"
+	if got != want {
+		t.Errorf(`&ErrMinBound{Field: "text", Value: "2", Bound: 1}.Error(), got: %v, want: %v`, got, want)
+	}
+}
