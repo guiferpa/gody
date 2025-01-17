@@ -26,9 +26,6 @@ jobs:
       - name: Running test
         run: go test -race -covermode atomic -coverprofile=covprofile ./...
 
-      - name: Install goveralls
-        run: go install github.com/mattn/goveralls@latest
-
       - name: Send coverage
         uses: shogo82148/actions-goveralls@v1
         with:
