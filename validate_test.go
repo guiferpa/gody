@@ -88,7 +88,10 @@ func TestSetTagName(t *testing.T) {
 	}
 
 	newTag := "new-tag"
-	validator.SetTagName(newTag)
+	if err := validator.SetTagName(newTag); err != nil {
+		t.Error(err)
+		return
+	}
 	if got, want := validator.tagName, newTag; got != want {
 		t.Errorf("Unexpected default tag value from validator struct type: got: %v, want: %v", got, want)
 		return

@@ -204,6 +204,6 @@ func BenchmarkSerializeBodyStruct(b *testing.B) {
 	b.ResetTimer()
 	body := map[string]string{"test-key": "test-value"}
 	for n := 0; n < b.N; n++ {
-		Serialize(body)
+		_, _ = Serialize(body)
 	}
 }
