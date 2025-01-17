@@ -12,7 +12,7 @@ all: test lint
 
 # Run tests
 test: $(TPARSE_BIN)
-	@go test ./... -v -json -race -buildvcs -cover -coverprofile=coverage.out | $(TPARSE_BIN) -pass
+	@go test $(shell go list ./... | grep -v examples) -v -json -race -buildvcs -cover -coverprofile=coverage.out | $(TPARSE_BIN) -pass
 
 # Run benchmarks of source code
 bench:
