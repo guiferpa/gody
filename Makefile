@@ -1,5 +1,6 @@
 SHELL=/bin/sh
 GOPATH ?= $(shell go env GOPATH)
+PKGS = $(shell go list ./... | grep -v examples | grep -v ruletest)
 LINTER = $(GOPATH)/bin/golangci-lint
 ACT_BIN = $(GOPATH)/bin/act
 TPARSE_BIN = $(GOPATH)/bin/tparse
@@ -12,11 +13,11 @@ all: test lint
 
 # Run tests
 test: $(TPARSE_BIN)
-	@go test $(shell go list ./... | grep -v examples) -v -json -race -buildvcs -cover -coverprofile=coverage.out | $(TPARSE_BIN) -pass
+	@go test $(PKGS) -v -json -race -buildvcs -cover -coverprofile=coverage.out | $(TPARSE_BIN) -pass
 
 # Run benchmarks of source code
 bench:
-	@go test ./... -v -race -buildvcs -bench=. -benchmem -cpu=1,2,4,12
+	@go test $(PKGS) -v -race -buildvcs -bench=. -benchmem -cpu=1,2,4,12
 
 # Run lint
 lint: $(LINTER)

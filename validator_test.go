@@ -55,18 +55,8 @@ func TestDuplicatedRule(t *testing.T) {
 	}
 }
 
-type mock struct{}
-
-func (_ *mock) Name() string {
-	return "mock"
-}
-
-func (r *mock) Validate(_, _, _ string) (bool, error) {
-	return true, errors.New("mock error")
-}
-
 func TestDuplicatedRuleError(t *testing.T) {
-	r := &mock{}
+	r := ruletest.NewRule("mock", true, errors.New("mock error"))
 	err := &ErrDuplicatedRule{RuleDuplicated: r}
 	got := err.Error()
 	want := "rule mock is duplicated"
