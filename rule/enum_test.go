@@ -51,3 +51,12 @@ func TestEnumWithInvalidParams(t *testing.T) {
 		}
 	}
 }
+
+func TestEnumError(t *testing.T) {
+	err := &ErrEnum{Field: "text", Value: "2", Enum: []string{"A", "B"}}
+	got := err.Error()
+	want := "the value 2 in field text not contains in [A B]"
+	if got != want {
+		t.Errorf(`&ErrEnum{Field: "text", Value: "2", Enum: []string{"A", "B"}}.Error(), got: %v, want: %v`, got, want)
+	}
+}

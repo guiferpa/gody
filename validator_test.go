@@ -1,6 +1,7 @@
 package gody
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/guiferpa/gody/v2/rule/ruletest"
@@ -51,5 +52,25 @@ func TestDuplicatedRule(t *testing.T) {
 	if _, ok := err.(*ErrDuplicatedRule); !ok {
 		t.Errorf("Unexpected error type: got: %v", err)
 		return
+	}
+}
+
+type mock struct{}
+
+func (_ *mock) Name() string {
+	return "mock"
+}
+
+func (r *mock) Validate(_, _, _ string) (bool, error) {
+	return true, errors.New("mock error")
+}
+
+func TestDuplicatedRuleError(t *testing.T) {
+	r := &mock{}
+	err := &ErrDuplicatedRule{RuleDuplicated: r}
+	got := err.Error()
+	want := "rule mock is duplicated"
+	if got != want {
+		t.Errorf(`&ErrDuplicatedRule{RuleDuplicated: r}.Error(), got: %v, want: %v`, got, want)
 	}
 }
