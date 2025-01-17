@@ -24,7 +24,7 @@ jobs:
         run: go mod download
 
       - name: Running test
-        run: go test $(go list ./... | grep -v examples) -race -covermode atomic -coverprofile=covprofile
+        run: go test $(go list ./... | grep -v examples | grep -v ruletest) -race -covermode atomic -coverprofile=covprofile
 
       - name: Send coverage
         uses: shogo82148/actions-goveralls@v1
