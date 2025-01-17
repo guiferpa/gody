@@ -7,7 +7,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/guiferpa/gody/badge.svg?branch=master)](https://coveralls.io/github/guiferpa/gody?branch=master)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/guiferpa/gody?color=purple&label=latest)](https://github.com/guiferpa/gody/releases/latest)
 
-### [Go versions supported]([https://github.com/guiferpa/gody/commit/312f2e79be13aeb17e351d61283dfa0ea7aef15a#diff-b31f1e5654d027d84c24cdba2ff31ab79e3ea617091ed348a97476a27b076078R12](https://github.com/guiferpa/gody/blob/main/.github/workflows/pipeline.yml#L12))
+### [Go versions supported](https://github.com/guiferpa/gody/blob/main/.github/workflows/pipeline.yml#L12)
 
 ### Installation
 ```bash
