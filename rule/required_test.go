@@ -43,3 +43,12 @@ func TestRequiredWithInvalidParam(t *testing.T) {
 		t.Errorf("unexpected result, result: %v, expected: %v", ok, false)
 	}
 }
+
+func TestRequiredError(t *testing.T) {
+	err := &ErrRequired{Field: "text"}
+	got := err.Error()
+	want := "text is required"
+	if got != want {
+		t.Errorf(`&ErrRequired{Field: "text"}.Error(), got: %v, want: %v`, got, want)
+	}
+}

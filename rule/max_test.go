@@ -67,7 +67,6 @@ func TestMaxWithInvalidValue(t *testing.T) {
 			t.Errorf("unexpected validation result as okay")
 		}
 	}
-
 }
 
 func TestMaxFailure(t *testing.T) {
@@ -85,5 +84,14 @@ func TestMaxFailure(t *testing.T) {
 		if _, ok := err.(*ErrMax); !ok {
 			t.Errorf("unexpected error: %v", err)
 		}
+	}
+}
+
+func TestMaxError(t *testing.T) {
+	err := &ErrMax{Field: "text", Value: 3, Max: 1}
+	got := err.Error()
+	want := "the value 3 in field text is grater than 1"
+	if got != want {
+		t.Errorf(`&ErrMax{Field: "text", Value: 3, Max: 1}.Error(), got: %v, want: %v`, got, want)
 	}
 }

@@ -87,3 +87,12 @@ func TestMinFailure(t *testing.T) {
 		}
 	}
 }
+
+func TestMinError(t *testing.T) {
+	err := &ErrMin{Field: "text", Value: 1, Min: 3}
+	got := err.Error()
+	want := "the value 1 in field text is less than 3"
+	if got != want {
+		t.Errorf(`&ErrMin{Field: "text", Value: 1, Min: 3}.Error(), got: %v, want: %v`, got, want)
+	}
+}
