@@ -168,6 +168,31 @@ func TestStructSlice(t *testing.T) {
 	}
 }
 
+func TestNil(t *testing.T) {
+	body := struct {
+		A string    `validate:"test"`
+		B any       `validate:"min=10"`
+		C *bool     `validate:"min=100 nullable"`
+		D *struct{} `validate:"min=1000"`
+	}{"a-value", "b-value", nil, nil}
+
+	fields, err := Serialize(body)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	wantedFields := []Field{
+		{Name: "a", Value: "a-value", Tags: map[string]string{"test": ""}},
+		{Name: "b", Value: "b-value", Tags: map[string]string{"min": "10"}},
+		{Name: "d", Value: "<nil>", Tags: map[string]string{"min": "1000"}},
+	}
+	if got, want := fmt.Sprint(fields), fmt.Sprint(wantedFields); got != want {
+		t.Errorf("Serialized fields unexpected: got: %v want: %v", got, want)
+		return
+	}
+}
+
 func TestRawSerializeWithEmptyTagName(t *testing.T) {
 	_, err := RawSerialize("", nil)
 	if err == nil {

@@ -132,6 +132,12 @@ func RawSerialize(tn string, b any) ([]Field, error) {
 				}
 			}
 		} else {
+			if fieldValue.Kind() == reflect.Pointer {
+				_, isNullable := tags[NullableTagName]
+				if fieldValue.IsNil() && !isNullable {
+					continue
+				}
+			}
 			fieldValueString := fmt.Sprintf("%v", fieldValue)
 			fields = append(fields, Field{
 				Name:  fieldNameToLower,
