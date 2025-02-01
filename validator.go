@@ -35,7 +35,7 @@ func (v *Validator) SetTagName(tn string) error {
 	return nil
 }
 
-func (v *Validator) Validate(b interface{}) (bool, error) {
+func (v *Validator) Validate(b any) (bool, error) {
 	return RawDefaultValidate(b, v.tagName, v.addedRules)
 }
 

@@ -22,7 +22,7 @@ type TestSerializeStructC struct {
 
 func TestSerializeBodyStruct(t *testing.T) {
 	cases := []struct {
-		param interface{}
+		param any
 		ok    bool
 	}{
 		{map[string]string{"test-key": "test-value"}, false},
@@ -45,7 +45,7 @@ func TestSerializeBodyStruct(t *testing.T) {
 
 func TestSerializeBodyTagFormat(t *testing.T) {
 	cases := []struct {
-		param interface{}
+		param any
 		ok    bool
 	}{
 		{struct {

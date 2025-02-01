@@ -37,12 +37,12 @@ type Field struct {
 	Tags  map[string]string
 }
 
-func Serialize(b interface{}) ([]Field, error) {
+func Serialize(b any) ([]Field, error) {
 	return RawSerialize(DefaultTagName, b)
 }
 
 // RawSerialize is a func to serialize/parse all content about the struct input
-func RawSerialize(tn string, b interface{}) ([]Field, error) {
+func RawSerialize(tn string, b any) ([]Field, error) {
 	if tn == "" {
 		return nil, &ErrEmptyTagName{}
 	}
