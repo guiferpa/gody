@@ -20,6 +20,7 @@ func RawDefaultValidate(b interface{}, tn string, customRules []Rule) (bool, err
 		rule.Min,
 		rule.MaxBound,
 		rule.MinBound,
+		rule.IsBool,
 	}
 
 	return RawValidate(b, tn, append(defaultRules, customRules...))

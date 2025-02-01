@@ -21,4 +21,7 @@ var (
 
 	// MinBound is a rule implemented
 	MinBound = &minBound{}
+
+	// IsBool is a rule implemented
+	IsBool = &isBool{}
 )
