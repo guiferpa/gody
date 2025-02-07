@@ -1,10 +1,10 @@
 package gody
 
 import (
-	"reflect"
-	"testing"
+    "reflect"
+    "testing"
 
-	"github.com/guiferpa/gody/v2/rule/ruletest"
+    "github.com/guiferpa/gody/v2/rule/ruletest"
 )
 
 type StructAForTest struct {
@@ -108,3 +108,33 @@ func TestSetTagName(t *testing.T) {
 		return
 	}
 }
+
+// Test generated using Keploy
+func TestDefaultValidate_CallsRawDefaultValidate(t *testing.T) {
+    payload := StructAForTest{A: "test-a", B: "test-b"}
+    customRules := []Rule{ruletest.NewRule("fake", true, nil)}
+
+    validated, err := DefaultValidate(payload, customRules)
+    if err != nil {
+        t.Errorf("Unexpected error: %v", err)
+    }
+    if !validated {
+        t.Error("Expected validation to pass, but it failed")
+    }
+}
+
+
+// Test generated using Keploy
+func TestRawValidate_RawSerializeError(t *testing.T) {
+    payload := make(chan int) // Invalid type to trigger RawSerialize error
+    rules := []Rule{ruletest.NewRule("fake", true, nil)}
+
+    validated, err := RawValidate(payload, "validate", rules)
+    if validated {
+        t.Error("Expected validation to fail, but it passed")
+    }
+    if err == nil {
+        t.Error("Expected an error, but got nil")
+    }
+}
+
