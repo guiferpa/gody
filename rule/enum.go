@@ -32,5 +32,5 @@ func (r *enum) Validate(f, v, p string) (bool, error) {
 			return true, nil
 		}
 	}
-	return true, &ErrEnum{f, v, es}
+	return false, &ErrEnum{f, v, es}
 }

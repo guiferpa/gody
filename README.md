@@ -83,6 +83,32 @@ gody.RawDefaultValidate(interface{}, string, []gody.Rule) (bool, error)
 gody.DefaultValidate(interface{}, []gody.Rule) (bool, error)
 ```
 
+### Dynamic Enum Validation (No Duplication)
+
+You can avoid duplicating enum values in struct tags by using dynamic parameters:
+
+```go
+const (
+    StatusCreated = "__CREATED__"
+    StatusPending = "__PENDING__"
+    StatusDoing   = "__DOING__"
+    StatusDone    = "__DONE__"
+)
+
+type Task struct {
+    Name   string `json:"name"`
+    Status string `json:"status" validate:"enum={status}"`
+}
+
+validator := gody.NewValidator()
+validator.AddRuleParameters(map[string]string{
+    "status": fmt.Sprintf("%s,%s,%s,%s", StatusCreated, StatusPending, StatusDoing, StatusDone),
+})
+validator.AddRules(rule.Enum)
+
+// Now you can validate Task structs without duplicating enum values in the tag!
+```
+
 ### Contribution policies
 
 1. At this time the only policy is don't create a Pull Request directly, it's necessary some discussions for some implementation then open an issue before to dicussion anything about the project.
