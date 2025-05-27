@@ -43,7 +43,7 @@ func TestEnumWithInvalidParams(t *testing.T) {
 	}
 	for _, test := range cases {
 		ok, err := r.Validate("", test.value, test.param)
-		if _, okErr := err.(*ErrEnum); !okErr {
+		if _, isErrEnum := err.(*ErrEnum); !isErrEnum {
 			t.Error(err)
 		}
 		if ok {
