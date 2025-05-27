@@ -37,9 +37,6 @@ func (v *Validator) SetTagName(tn string) error {
 }
 
 func (v *Validator) AddRuleParameters(params map[string]string) {
-	if v.params == nil {
-		v.params = make(map[string]string)
-	}
 	for k, val := range params {
 		v.params[k] = val
 	}
