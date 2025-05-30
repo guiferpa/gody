@@ -14,6 +14,7 @@ type Validator struct {
 	tagName    string
 	rulesMap   map[string]Rule
 	addedRules []Rule
+	params     map[string]string
 }
 
 func (v *Validator) AddRules(rs ...Rule) error {
@@ -35,13 +36,20 @@ func (v *Validator) SetTagName(tn string) error {
 	return nil
 }
 
+func (v *Validator) AddRuleParameters(params map[string]string) {
+	for k, val := range params {
+		v.params[k] = val
+	}
+}
+
 func (v *Validator) Validate(b any) (bool, error) {
-	return RawDefaultValidate(b, v.tagName, v.addedRules)
+	return RawDefaultValidateWithParams(b, v.tagName, v.addedRules, v.params)
 }
 
 func NewValidator() *Validator {
 	tagName := DefaultTagName
 	rulesMap := make(map[string]Rule)
 	addedRules := make([]Rule, 0)
-	return &Validator{tagName, rulesMap, addedRules}
+	params := make(map[string]string)
+	return &Validator{tagName, rulesMap, addedRules, params}
 }
