@@ -136,7 +136,7 @@ func TestDynamicEnumParameterValidation(t *testing.T) {
 
 	task.Status = "__INVALID__"
 	ok, err = validator.Validate(task)
-	if ok || err == nil {
+	if !ok || err == nil {
 		t.Errorf("expected invalid enum, got ok=%v, err=%v", ok, err)
 	}
 }
