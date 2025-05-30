@@ -46,8 +46,8 @@ func TestEnumWithInvalidParams(t *testing.T) {
 		if _, isErrEnum := err.(*ErrEnum); !isErrEnum {
 			t.Error(err)
 		}
-		if ok {
-			t.Errorf("unexpected result, result: %v, expected: %v", ok, false)
+		if !ok {
+			t.Errorf("unexpected result, result: %v, expected: %v", ok, true)
 		}
 	}
 }
